@@ -2,38 +2,28 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sincronizzazione in corso...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Pannello di Controllo</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background-color: #f9f9f9; color: #333; padding: 20px; box-sizing: border-box; }
-    .card { width: 100%; max-width: 450px; padding: 35px; background: white; border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); text-align: center; box-sizing: border-box; }
-    p { font-size: 16px; color: #555; margin-bottom: 25px; line-height: 1.5; }
-    .loader { border: 4px solid #f3f3f3; border-top: 4px solid #1a73e8; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #f9f9f9; }
+    iframe { width: 100%; height: 100%; border: none; display: block; }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <div class="loader"></div>
-    <h3>Connessione sicura in corso</h3>
-    <p>Verifica dell'account Google e sincronizzazione dell'applicazione. Attendi qualche istante...</p>
-  </div>
+  <!-- Inseriamo lo script direttamente dentro la pagina di GitHub -->
+  <iframe id="app-frame" src=""></iframe>
 
   <script>
-    // ⚠️ INSERISCI QUI IL LINK /EXEC DELLA TUA WEB APP PRINCIPALE DI GOOGLE
-    const API_URL = "https://script.google.com/macros/s/AKfycbwM8bk0RcdHSqEikPSSMuFUMvQMPr7prS5ram9uwElkbS1PPMDT9Dw1zy_3rHMIk4RG/exec";
-
-    // Recupera eventuali parametri dall'URL (es. ?loop=true)
+    // Recupera eventuali parametri passati dall'URL corrente (es. ?loop=true)
     const urlParams = new URLSearchParams(window.location.search);
     const loopParam = urlParams.get('loop') || '';
 
-    // Genera l'URL finale per richiedere l'interfaccia grafica corretta bypassando il blocco CORS
-    // Aggiungiamo un parametro per far capire allo script che la richiesta arriva dal sito
-    const urlFinal = `${API_URL}?loop=${loopParam}&render=html`;
+    // URL BASE della Web App principale di Google
+    const GOOGLE_SCRIPT_URL = "https://google.com";
 
-    // Esegui il reindirizzamento automatico immediato
-    window.location.replace(urlFinal);
+    // Costruisce l'URL dinamico da inserire nel frame del tuo sito personale
+    document.getElementById('app-frame').src = `${GOOGLE_SCRIPT_URL}?loop=${loopParam}`;
   </script>
 </body>
 </html>
