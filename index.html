@@ -20,7 +20,7 @@
     const loopParam = urlParams.get('loop') || '';
 
     // URL BASE della Web App principale di Google
-    const GOOGLE_SCRIPT_URL = "https://google.com";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwM8bk0RcdHSqEikPSSMuFUMvQMPr7prS5ram9uwElkbS1PPMDT9Dw1zy_3rHMIk4RG/exec";
 
     // Costruisce l'URL dinamico da inserire nel frame del tuo sito personale
     document.getElementById('app-frame').src = `${GOOGLE_SCRIPT_URL}?loop=${loopParam}`;
