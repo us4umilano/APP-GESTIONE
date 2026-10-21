@@ -2,28 +2,28 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Pannello di Controllo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reindirizzamento...</title>
   <style>
-    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #f9f9f9; }
-    iframe { width: 100%; height: 100%; border: none; display: block; }
+    body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background-color: #f9f9f9; }
+    .box { text-align: center; padding: 20px; }
   </style>
 </head>
 <body>
-
-  <!-- Inseriamo lo script direttamente dentro la pagina di GitHub -->
-  <iframe id="app-frame" src=""></iframe>
+  <div class="box">
+    <h3>Sincronizzazione in corso...</h3>
+    <p>Verifica dell'account Google...</p>
+  </div>
 
   <script>
-    // Recupera eventuali parametri passati dall'URL corrente (es. ?loop=true)
     const urlParams = new URLSearchParams(window.location.search);
     const loopParam = urlParams.get('loop') || '';
-
-    // URL BASE della Web App principale di Google
+    
+    // URL della tua Web App principale di Google
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwM8bk0RcdHSqEikPSSMuFUMvQMPr7prS5ram9uwElkbS1PPMDT9Dw1zy_3rHMIk4RG/exec";
-
-    // Costruisce l'URL dinamico da inserire nel frame del tuo sito personale
-    document.getElementById('app-frame').src = `${GOOGLE_SCRIPT_URL}?loop=${loopParam}`;
+    
+    // Salta direttamente alla Web App senza blocchi di sicurezza frame
+    window.location.replace(`${GOOGLE_SCRIPT_URL}?loop=${loopParam}`);
   </script>
 </body>
 </html>
