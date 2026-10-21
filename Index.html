@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestione Applicazione</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background-color: #f9f9f9; color: #333; padding: 20px; box-sizing: border-box; }
+    .card { width: 100%; max-width: 480px; padding: 35px; background: white; border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); text-align: center; box-sizing: border-box; display: none; }
+    h2, h3 { margin-top: 0; font-size: 24px; font-weight: 700; }
+    p { font-size: 16px; color: #555; margin-bottom: 25px; line-height: 1.5; }
+    .btn { display: block; color: white; padding: 18px 22px; border: none; border-radius: 6px; font-weight: bold; font-size: 18px; width: 100%; cursor: pointer; text-decoration: none; box-sizing: border-box; -webkit-appearance: none; }
+    .btn-blue { background-color: #1a73e8; }
+    .btn-green { background-color: #4CAF50; }
+    .loader { border: 4px solid #f3f3f3; border-top: 4px solid #1a73e8; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <!-- SCHERMATA DI CARICAMENTO INIZIALE -->
+  <div id="card-loading" class="card" style="display: block;">
+    <div class="loader"></div>
+    <p>Verifica dell'account e sincronizzazione dei file in corso...</p>
+  </div>
+
+  <!-- INTERFACCIA A: FILE GIÀ ESISTENTE -->
+  <div id="card-rilevato" class="card" style="border-top: 6px solid #1a73e8;">
+    <h3 style="color: #1a73e8;">File di gestione rilevato</h3>
+    <p>Il tuo archivio è pronto per l'uso. Clicca sotto per accedere al pannello operativo.</p>
+    <a id="link-rilevato" href="#" class="btn btn-blue">Apri Pannello di Controllo</a>
+  </div>
+
+  <!-- INTERFACCIA B: PRIMA CREAZIONE -->
+  <div id="card-creazione" class="card" style="border-top: 6px solid #4CAF50;">
+    <h2 style="color: #4CAF50;">Configurazione Completata!</h2>
+    <p>Il tuo file personalizzato è stato correttamente generato e inserito nel tuo Google Drive.</p>
+    <a id="link-creazione" href="#" class="btn btn-green">Entra nell'Applicazione Ora</a>
+  </div>
+
+  <!-- INTERFACCIA C: RETRO-LOOP COMPLETATO -->
+  <div id="card-loop" class="card" style="border-top: 6px solid #2196F3;">
+    <h3 style="color: #2196F3;">Reindirizzamento Completato</h3>
+    <p>L'amministratore ha terminato l'elaborazione dei tuoi dati.</p>
+    <a id="link-loop" href="#" class="btn btn-blue" style="background-color: #2196F3;">Apri il tuo Foglio di Lavoro</a>
+  </div>
+
+  <!-- INTERFACCIA D: ACCESSO NEGATO / DA ABILITARE -->
+  <div id="card-negato" class="card" style="border-top: 6px solid #f44336; text-align: left;">
+    <h3 style="color: #f44336;">Accesso non autorizzato</h3>
+    <p>L'account Google rilevato non risulta ancora abilitato dall'amministratore.</p>
+    <button class="btn btn-blue" style="background-color: #f44336;">Richiedi Abilitazione</button>
+  </div>
+
+  <script>
+    // ⚠️ SOSTITUISCI QUESTO URL CON IL LINK /EXEC DELLA TUA WEB APP PRINCIPALE
+    const API_URL = "https://script.google.com/macros/s/AKfycbwM8bk0RcdHSqEikPSSMuFUMvQMPr7prS5ram9uwElkbS1PPMDT9Dw1zy_3rHMIk4RG/exec";
+
+    // Cattura eventuali parametri passati dall'URL corrente (es. ?loop=true)
+    const urlParams = new URLSearchParams(window.location.search);
+    const loopParam = urlParams.get('loop') || '';
+
+    // Esegui la chiamata asincrona all'API dello script Google
+    fetch(`${API_URL}?loop=${loopParam}`)
+      .then(response => response.json())
+      .then(data => {
+        // Nascondi la card di caricamento
+        document.getElementById('card-loading').style.display = 'none';
+
+        // Mostra la schermata corretta in base alla risposta JSON dello script
+        if (data.status === "file_rilevato") {
+          document.getElementById('link-rilevato').href = data.targetUrl;
+          document.getElementById('card-rilevato').style.display = 'block';
+        } else if (data.status === "prima_creazione") {
+          document.getElementById('link-creazione').href = data.targetUrl;
+          document.getElementById('card-creazione').style.display = 'block';
+        } else if (data.status === "loop_completato") {
+          document.getElementById('link-loop').href = data.targetUrl;
+          document.getElementById('card-loop').style.display = 'block';
+        } else {
+          document.getElementById('card-negato').style.display = 'block';
+        }
+      })
+      .catch(error => {
+        document.getElementById('card-loading').innerHTML = `<h3>Errore di Connessione</h3><p>Impossibile comunicare con il server. Verifica l'accesso Google.</p>`;
+      });
+  </script>
+</body>
+</html>
